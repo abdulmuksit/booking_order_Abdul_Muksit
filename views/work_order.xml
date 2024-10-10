@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_work_order_tree" model="ir.ui.view">
+        <field name="name">work.order.tree</field>
+        <field name="model">work.order</field>
+        <field name="arch" type="xml">
+            <tree string="Work Order" create="0">
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="team_id"/>
+                <field name="team_leader_id"/>
+                <field name="planned_start"/>
+                <field name="planned_end"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_work_order_form" model="ir.ui.view">
+        <field name="name">work.order.form</field>
+        <field name="model">work.order</field>
+        <field name="arch" type="xml">
+            <form string="Work Order" create="0">
+                <header>
+                    <button name="action_start_work" type="object" string="Start Work" class="btn-primary" states="pending" />
+                    <button name="action_end_work" type="object" string="End Work" class="btn-success" states="in_progress" />
+                    <button name="action_reset_work" type="object" string="Reset" class="btn-warning" states="in_progress"/>
+                    <button name="action_cancel_work" type="object" string="Cancel" class="btn-danger" states="pending,in_progress"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,in_progress,done" />
+                </header>
+                <sheet>
+                    <div class="oe_right">
+                        <button name="%(action_report_work_order)d" string="Print Work Order" type="action" class="btn-primary"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sale_order_id"/>
+                            <field name="team_id" attrs="{'readonly':[('state', 'not in', ('pending','in_progress'))]}"/>
+                            <field name="team_leader_id" attrs="{'readonly':[('state', 'not in', ('pending','in_progress'))]}"/>
+                            <field name="team_member_ids" widget="many2many_tags" attrs="{'readonly':[('state', 'not in', ('pending','in_progress'))]}"/>
+                        </group>
+                        <group>
+                            <field name="planned_start" attrs="{'readonly':[('state', 'not in', ('pending','in_progress'))]}"/>
+                            <field name="planned_end" attrs="{'readonly':[('state', 'not in', ('pending','in_progress'))]}"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <field name="notes" attrs="{'readonly':[('state', 'not in', ('pending','in_progress'))]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_work_order" model="ir.actions.act_window">
+        <field name="name">Work Order</field>
+        <field name="res_model">work.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+    </record>
+
+    <record id="cancel_work_order_wizard" model="ir.ui.view">
+        <field name="name">cancel.work.order.wizard</field>
+        <field name="model">work.order.cancel</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="reason" required="1" />
+                    </group>
+                </sheet>
+            </form>
+            <footer>
+                <button string='Confirm' name="action_cancel_confirm" type="object" class="btn-primary"/>
+                <button string="Cancel" class="btn-default" special="cancel"/>
+            </footer>
+        </field>
+    </record>
+</odoo>

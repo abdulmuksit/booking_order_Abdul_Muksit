@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_sale_order_form_booking" model="ir.ui.view">
+        <field name="name">sale.order.form.booking</field>
+        <field name="model">sale.order</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="99"/>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <button name="action_view_invoice" position="after">
+                <field name="work_order_id" invisible="1"/>
+                <button name="action_view_work_order" type="object" class="oe_stat_button" icon="fa-tasks" attrs="{'invisible': [('work_order_id', '=', False)]}">
+                    <field name="work_order_id" widget="statinfo" string="Work Order"/>
+                </button>
+            </button>
+            <button name="action_confirm" position="before">
+                <button name="action_check_availability" type="object" string="Check" class="btn-primary"/>
+            </button>
+            <xpath expr="//sheet/group" position="inside">
+                <group>
+                    <field name="is_booking_order" invisible="1"/>
+                    <field name="service_team_id" required="1"/>
+                    <field name="team_leader_id" required="1"/>
+                    <field name="team_member_ids" widget="many2many_tags" required="1"/>
+                    <field name="booking_start" required="1"/>
+                    <field name="booking_end" required="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_booking_order" model="ir.actions.act_window">
+        <field name="name">Booking Order</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_booking_order', '=', True)]</field>
+        <field name="context">{'default_is_booking_order': 1}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sale.view_order_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_sale_order_form_booking')})]"/>
+    </record>
+</odoo>

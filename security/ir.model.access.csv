@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_service_team,access_service_team,model_service_team,,1,1,1,1
+access_work_order,access_work_order,model_work_order,,1,1,1,1
+access_work_order_cancel,access_work_order_cancel,model_work_order_cancel,,1,1,1,1

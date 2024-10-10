@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <report 
+        id="action_report_work_order"
+        model="work.order"
+        string="Work Order"
+        report_type="qweb-pdf"
+        name="booking_order_abdul_muksit_09102024.report_work_order_document"
+        file="booking_order_abdul_muksit_09102024.report_work_order_document"
+    />
+
+    <record id="work_order_custom_paper" model="report.paperformat">
+        <field name="name">Work Order paper format</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">15</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False" />
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_work_order" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="booking_order_abdul_muksit_09102024.work_order_custom_paper"/>
+    </record>
+
+    <template id="report_work_order_document">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="border: 1px solid black; padding: 5px;" colspan="4"><span t-field="o.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 5px;"><strong>Team Name</strong></td>
+                                <td style="border: 1px solid black; padding: 5px;"><span t-field="o.team_id.name"/></td>
+                                <td style="border: 1px solid black; padding: 5px;"><strong>Customer</strong></td>
+                                <td style="border: 1px solid black; padding: 5px;"><span t-field="o.sale_order_id.partner_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 5px;"><strong>Booking Order Ref</strong></td>
+                                <td style="border: 1px solid black; padding: 5px;"><span t-field="o.sale_order_id.name"/></td>
+                                <td style="border: 1px solid black; padding: 5px;"><strong>Date</strong></td>
+                                <td style="border: 1px solid black; padding: 5px;"><span t-field="o.planned_start"/> - <span t-field="o.planned_end"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 5px;" colspan="4">
+                                    <p><strong>NOTES:</strong></p>
+                                    <p><span t-field="o.notes"/></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding-top: 5px; padding-left: 5px; padding-bottom: 40px;" colspan="4">
+                                    <p><strong>Signature:</strong></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
